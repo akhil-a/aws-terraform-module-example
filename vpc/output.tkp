@@ -1,0 +1,22 @@
+output "VPC ID" {
+  value = aws_vpc.vpc.id
+}
+
+
+output "public subnets" {
+  value = [for subs in aws_aws_subnet.public_subnets : subs.id]
+}
+
+output "public subnets CIDR block" {
+  value = [for subs in aws_aws_subnet.public_subnets : subs.cidr_block]
+}
+
+
+output "private subnets" {
+  value = [for subs in aws_aws_subnet.private_subnets : subs.id]
+}
+
+
+output "private subnets CIDR block" {
+  value = [for subs in aws_aws_subnet.private_subnets : subs.cidr_block]
+}
