@@ -47,7 +47,7 @@ resource "aws_subnet" "private_subnets" {
 }
 
 resource "aws_eip" "vpc_eip" {
-  count  = var.enable_nat_gw == true ? 1 : 0
+  count  = var.enable_private_subnet  == true ? 1 : 0
   domain = "vpc"
   tags = {
     Name = "${var.project_name}-${var.project_env}-nat"
@@ -55,6 +55,7 @@ resource "aws_eip" "vpc_eip" {
 }
 
 resource "aws_nat_gateway" "natgw" {
+  count  = var.enable_private_subnet == true ? 1 : 0
   allocation_id = aws_eip.vpc_eip[0].id
   subnet_id     = aws_subnet.public_subnets[0].id
 
@@ -94,7 +95,7 @@ resource "aws_route_table" "private_route_table" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_nat_gateway.natgw.id
+    gateway_id = aws_nat_gateway.natgw[0].id
   }
 
   tags = {
